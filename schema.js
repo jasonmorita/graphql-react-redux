@@ -13,6 +13,7 @@ const URL_PARAMS = '?format=json';
 const URL_PEOPLE = '/people';
 const URL_PLANETS = '/planets';
 const URL_VEHICLES = '/vehicles';
+const URL_STARSHIPS = '/starships';
 const URL_FILMS = '/films';
 const URL_SPECIES = '/species';
 
@@ -35,6 +36,26 @@ const PersonType = new GraphQLObjectType({
         name: {
             type: GraphQLString,
             resolve: (person) => person.name
+        },
+        url: {
+            type: GraphQLString,
+            resolve: (person) => person.url
+        },
+        films: {
+            type: new GraphQLList(FilmType),
+            resolve: (person) => person.species
+        }
+    })
+});
+
+const FilmType = new GraphQLObjectType({
+    name: 'Film',
+    description: '...',
+
+    fields: () => ({
+        title: {
+            type: GraphQLString,
+            resolve: (film) => film.title
         }
     })
 });
@@ -50,6 +71,13 @@ const QueryType = new GraphQLObjectType({
                 id: {type: GraphQLString}
             },
             resolve: (root, args) => getPersonByURL(`${URL_PEOPLE}/${args.id}`)
+        },
+        film: {
+            type: PersonType,
+            args: {
+                id: {type: GraphQLString}
+            },
+            resolve: (root, args) => getPersonByURL(`${URL_FILMS}/${args.id}`)
         }
     })
 });
