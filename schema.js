@@ -7,11 +7,17 @@ import {
 
 import fetch from 'node-fetch';
 
-const BASE_URL = 'http://swapi.co/api/people';
-const PARAMS = '?format=json';
+const BASE_URL = 'http://swapi.co/api';
+const URL_PARAMS = '?format=json';
+
+const URL_PEOPLE = '/people';
+const URL_PLANETS = '/planets';
+const URL_VEHICLES = '/vehicles';
+const URL_FILMS = '/films';
+const URL_SPECIES = '/species';
 
 function getPersonByURL(relativeURL) {
-    let url = `${BASE_URL}${relativeURL}${PARAMS}`;
+    let url = `${BASE_URL}${relativeURL}${URL_PARAMS}`;
     console.log(url);
     return fetch(url)
     .then(res => res.json())
@@ -43,7 +49,7 @@ const QueryType = new GraphQLObjectType({
             args: {
                 id: {type: GraphQLString}
             },
-            resolve: (root, args) => getPersonByURL(`/1`)
+            resolve: (root, args) => getPersonByURL(`${URL_PEOPLE}/${args.id}`)
         }
     })
 });
