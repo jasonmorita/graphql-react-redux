@@ -5,10 +5,6 @@ import {
     GraphQLList
  } from 'graphql';
 
-import {
-    last
-} from 'lodash';
-
 import fetch from 'node-fetch';
 
 const BASE_URL = 'http://swapi.co/api';
@@ -21,26 +17,17 @@ const URL_STARSHIPS = '/starships';
 const URL_FILMS = '/films';
 const URL_SPECIES = '/species';
 
-function getPersonByURL(id) {
+function getPersonById(id) {
     let url = `${BASE_URL}${URL_PEOPLE}/${id}${URL_PARAMS}`;
-    console.log(url);
     return fetch(url)
     .then(res => res.json())
-    .then(json => {
-        console.log(json);
-        return json;
-    });
+    .then(json => json);
 }
 
-function getFilmByURL(id) {
-    let url = `${BASE_URL}${URL_FILMS}/${id}${URL_PARAMS}`;
-    console.log(url);
+function getEntityByURL(url) {
     return fetch(url)
     .then(res => res.json())
-    .then(json => {
-        console.log(json);
-        return json;
-    });
+    .then(json => json);
 }
 
 const PersonType = new GraphQLObjectType({
@@ -58,10 +45,15 @@ const PersonType = new GraphQLObjectType({
         },
         films: {
             type: new GraphQLList(FilmType),
-            resolve: (person) => person.films.map(filmUrl => {
-                let id = last(filmUrl.split('/').filter(str => str));
-                return getFilmByURL(id);
-            })
+            resolve: (person) => person.films.map(getEntityByURL)
+        },
+        vehicles: {
+            type: new GraphQLList(VehicleType),
+            resolve: (person) => person.vehicles.map(getEntityByURL)
+        },
+        species: {
+            type: new GraphQLList(SpeciesType),
+            resolve: (person) => person.species.map(getEntityByURL)
         }
     })
 });
@@ -71,12 +63,33 @@ const FilmType = new GraphQLObjectType({
     description: '...',
 
     fields: () => ({
-        id: {
-            type: GraphQLString
-        },
         title: {
             type: GraphQLString,
             resolve: (film) => film.title
+        }
+    })
+});
+
+const VehicleType = new GraphQLObjectType({
+    name: 'Vehicle',
+    description: '...',
+
+    fields: () => ({
+        name: {
+            type: GraphQLString,
+            resolve: (vehicle) => vehicle.name
+        }
+    })
+});
+
+const SpeciesType = new GraphQLObjectType({
+    name: 'Species',
+    description: '...',
+
+    fields: () => ({
+        name: {
+            type: GraphQLString,
+            resolve: (species) => species.name
         }
     })
 });
@@ -91,14 +104,7 @@ const QueryType = new GraphQLObjectType({
             args: {
                 id: {type: GraphQLString}
             },
-            resolve: (root, args) => getPersonByURL(`${args.id}`)
-        },
-        film: {
-            type: PersonType,
-            args: {
-                id: {type: GraphQLString}
-            },
-            resolve: (root, args) => getResourceByURL(`${args.id}`)
+            resolve: (root, args) => getPersonById(`${args.id}`)
         }
     })
 });
