@@ -5,6 +5,10 @@ import {
     GraphQLList
  } from 'graphql';
 
+import {
+    last
+} from 'lodash';
+
 import fetch from 'node-fetch';
 
 const BASE_URL = 'http://swapi.co/api';
@@ -17,8 +21,19 @@ const URL_STARSHIPS = '/starships';
 const URL_FILMS = '/films';
 const URL_SPECIES = '/species';
 
-function getPersonByURL(relativeURL) {
-    let url = `${BASE_URL}${relativeURL}${URL_PARAMS}`;
+function getPersonByURL(id) {
+    let url = `${BASE_URL}${URL_PEOPLE}/${id}${URL_PARAMS}`;
+    console.log(url);
+    return fetch(url)
+    .then(res => res.json())
+    .then(json => {
+        console.log(json);
+        return json;
+    });
+}
+
+function getFilmByURL(id) {
+    let url = `${BASE_URL}${URL_FILMS}/${id}${URL_PARAMS}`;
     console.log(url);
     return fetch(url)
     .then(res => res.json())
@@ -43,7 +58,10 @@ const PersonType = new GraphQLObjectType({
         },
         films: {
             type: new GraphQLList(FilmType),
-            resolve: (person) => person.species
+            resolve: (person) => person.films.map(filmUrl => {
+                let id = last(filmUrl.split('/').filter(str => str));
+                return getFilmByURL(id);
+            })
         }
     })
 });
@@ -53,6 +71,9 @@ const FilmType = new GraphQLObjectType({
     description: '...',
 
     fields: () => ({
+        id: {
+            type: GraphQLString
+        },
         title: {
             type: GraphQLString,
             resolve: (film) => film.title
@@ -70,14 +91,14 @@ const QueryType = new GraphQLObjectType({
             args: {
                 id: {type: GraphQLString}
             },
-            resolve: (root, args) => getPersonByURL(`${URL_PEOPLE}/${args.id}`)
+            resolve: (root, args) => getPersonByURL(`${args.id}`)
         },
         film: {
             type: PersonType,
             args: {
                 id: {type: GraphQLString}
             },
-            resolve: (root, args) => getPersonByURL(`${URL_FILMS}/${args.id}`)
+            resolve: (root, args) => getResourceByURL(`${args.id}`)
         }
     })
 });
