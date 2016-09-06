@@ -1,6 +1,6 @@
 # graphqlswapi
 
-Super simple example based on ... using [https://swapi.co/](https://swapi.co/).
+Super simple example based on [GraphQL in 30 mins video](https://www.youtube.com/watch?v=UBGzsb2UkeY)  using [https://swapi.co/](https://swapi.co/).
 
 `npm i`
 `npm start`
