@@ -1,6 +1,6 @@
 # graphqlswapi
 
-Super simple example based on ... using 
+Super simple example based on ... using [https://swapi.co/](https://swapi.co/).
 
 `npm i`
 `npm start`
