@@ -17,6 +17,8 @@ const URL_STARSHIPS = '/starships';
 const URL_FILMS = '/films';
 const URL_SPECIES = '/species';
 
+const DDG_URL = 'http://api.duckduckgo.com/?format=json&q=';
+
 function getPersonById(id) {
     let url = `${BASE_URL}${URL_PEOPLE}/${id}${URL_PARAMS}`;
     return fetch(url)
@@ -28,6 +30,12 @@ function getEntityByURL(url) {
     return fetch(url)
     .then(res => res.json())
     .then(json => json);
+}
+
+function getImageByName(name) {
+    return fetch(`${DDG_URL}${name}`)
+    .then(res => res.json())
+    .then(json => json.Image);
 }
 
 const PersonType = new GraphQLObjectType({
@@ -54,6 +62,10 @@ const PersonType = new GraphQLObjectType({
         species: {
             type: new GraphQLList(SpeciesType),
             resolve: (person) => person.species.map(getEntityByURL)
+        },
+        image: {
+            type: GraphQLString,
+            resolve: (person) => getImageByName(person.name)
         }
     })
 });
@@ -66,6 +78,18 @@ const FilmType = new GraphQLObjectType({
         title: {
             type: GraphQLString,
             resolve: (film) => film.title
+        }
+    })
+});
+
+const ImageType = new GraphQLObjectType({
+    name: 'Image',
+    description: '...',
+
+    fields: () => ({
+        image: {
+            type: GraphQLString,
+            resolve: (image) => image.Image
         }
     })
 });
