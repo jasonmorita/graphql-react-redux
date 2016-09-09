@@ -32,10 +32,10 @@ function getEntityByURL(url) {
     .then(json => json);
 }
 
-function getImageByName(name) {
+function getEntityByName(name) {
     return fetch(`${DDG_URL}${name}`)
     .then(res => res.json())
-    .then(json => json.Image);
+    .then(json => json);
 }
 
 const PersonType = new GraphQLObjectType({
@@ -63,9 +63,9 @@ const PersonType = new GraphQLObjectType({
             type: new GraphQLList(SpeciesType),
             resolve: (person) => person.species.map(getEntityByURL)
         },
-        image: {
-            type: GraphQLString,
-            resolve: (person) => getImageByName(person.name)
+        entity: {
+            type: EntityType,
+            resolve: (person) => getEntityByName(person.name)
         }
     })
 });
@@ -82,14 +82,18 @@ const FilmType = new GraphQLObjectType({
     })
 });
 
-const ImageType = new GraphQLObjectType({
-    name: 'Image',
+const EntityType = new GraphQLObjectType({
+    name: 'Entity',
     description: '...',
 
     fields: () => ({
+        abstract: {
+            type: GraphQLString,
+            resolve: (entity) => entity.Abstract
+        },
         image: {
             type: GraphQLString,
-            resolve: (image) => image.Image
+            resolve: (entity) => entity.Image
         }
     })
 });
