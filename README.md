@@ -10,18 +10,19 @@ Navigate to `http://localhost:5000`
 
 Query like this:
 ```
-query Person {
-  person(id: "5") {
+query character {
+  person(id: "21") {
     name
     url
-    vehicles{
-      name
-    }
     films {
       title
     }
-    species{
+    species {
       name
+    }
+    entity{
+      image
+      abstract
     }
   }
 }
