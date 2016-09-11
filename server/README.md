@@ -1,4 +1,4 @@
-# graphqlswapi
+# GraphQL Server
 
 Super simple GraphQL example based on [GraphQL in 30 mins video](https://www.youtube.com/watch?v=UBGzsb2UkeY)  using [https://swapi.co/](https://swapi.co/) REST API.
 
