@@ -22,19 +22,28 @@ const DDG_URL = 'http://api.duckduckgo.com/?format=json&q=';
 function getPersonById(id) {
     let url = `${BASE_URL}${URL_PEOPLE}/${id}${URL_PARAMS}`;
     return fetch(url)
-    .then(res => res.json())
+    .then(res => {
+        console.log('getPersonById');
+        return res.json();
+    })
     .then(json => json);
 }
 
 function getEntityByURL(url) {
     return fetch(url)
-    .then(res => res.json())
+    .then(res => {
+        console.log('getEntityByURL');
+        return res.json();
+    })
     .then(json => json);
 }
 
 function getEntityByName(name) {
     return fetch(`${DDG_URL}${name}`)
-    .then(res => res.json())
+    .then(res => {
+        console.log('getEntityByName');
+        return res.json();
+    })
     .then(json => json);
 }
 

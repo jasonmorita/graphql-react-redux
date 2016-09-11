@@ -7,6 +7,8 @@ import reducer from "./reducers/reducers.js";
 import thunkMiddleware from "redux-thunk";
 import compose from 'lodash.compose';
 
+import './index.css';
+
 import { CharacterContainer } from "./components/character/Character.js";
 
 let store = createStore(reducer, compose(
