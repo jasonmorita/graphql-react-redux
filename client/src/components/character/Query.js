@@ -1,51 +1,55 @@
 import React from 'react';
 import { connect } from 'react-redux';
 import { getGraph } from '../../actions/character.js';
+import get from 'lodash.get';
 
 const query = `
-    query Person {
-      person(id: "35") {
+query Person {
+    person(id: "1") {
         name
         url
         vehicles {
-          name
+            name
         }
         films {
-          title
+            title
         }
         species {
-          name
+            name
         }
         entity {
-          image
+            image
         }
-      }
     }
+}
 `;
 
 let Query = React.createClass({
-  componentDidMount() {
-    this.props.dispatch(getGraph(query));
-  },
-  render() {
-    let character = this.props.store.character;
-    return (
-      <div>
-        <h3>{ character.name }</h3>
-        <h3>Vehicles:</h3>
-        <ul>
-        </ul>
-      </div>
-    )
-  }
+    componentDidMount() {
+        this.props.dispatch(getGraph(query));
+    },
+    render() {
+        let fetching = this.props.store.character.fetching;
+        let name = get(this.props.store.character, 'character.name');
+
+        return (
+            <div>
+                <p>Fetching: {this.props.store.character.fetching}</p>
+                <h3>{ name }</h3>
+                <h3>Vehicles:</h3>
+                <ul>
+                </ul>
+            </div>
+        )
+    }
 });
 
 const mapStateToProps = (state) => {
-  return {
-    store: state.character
-  }
+    return {
+        store: state
+    }
 };
 
 export const QueryContainer = connect(
-  mapStateToProps
+    mapStateToProps
 )(Query);
