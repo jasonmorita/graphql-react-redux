@@ -1,4 +1,3 @@
-// import { combineReducers } from 'redux';
 import character from './character';
 
 var reducer = function(state, action) {

@@ -1,3 +1,5 @@
+import 'whatwg-fetch';
+
 const startingRequest = () => {
     return {
         type: "REQUEST_START"
@@ -19,21 +21,15 @@ const updateCharacter = (response) => {
 
 export const getGraph = (payload) => {
     return dispatch => {
+        let url = `http://localhost:5000?query=${encodeURIComponent(payload)}`;
+
         dispatch(startingRequest());
-        return new Promise(function(resolve, reject) {
-            let request=new XMLHttpRequest();
-            request.open("POST", "http://localhost:5000", true);
-            request.setRequestHeader("Content-Type",
-            "application/graphql");
-            request.send(payload);
-            request.onreadystatechange = () => {
-                if (request.readyState === 4) {
-                    resolve(request.responseText)
-                }
-            }
-        }).then(response => {
+
+        fetch(url)
+        .then(res => res.json())
+        .then(res => {
             dispatch(finishedRequest());
-            dispatch(updateCharacter(JSON.parse(response)));
+            dispatch(updateCharacter(res.data));
         })
     }
 }

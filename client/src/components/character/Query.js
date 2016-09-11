@@ -2,19 +2,39 @@ import React from 'react';
 import { connect } from 'react-redux';
 import { getGraph } from '../../actions/character.js';
 
+const query = `
+    query Person {
+      person(id: "15") {
+        name
+        url
+        vehicles {
+          name
+        }
+        films {
+          title
+        }
+        species {
+          name
+        }
+        entity {
+          image
+        }
+      }
+    }
+`;
+
 let Query = React.createClass({
   componentDidMount() {
-    this.props.dispatch(getGraph("{person(id: 2) {name}}"));
+    this.props.dispatch(getGraph(query));
   },
   render() {
-    let dispatch = this.props.dispatch;
-    let fetching = String(this.props.store.get('fetching'));
-    let queryText;
-    let goldberg = this.props.store.get('character').toObject();
+    let character = this.props.store.character;
     return (
       <div>
-        <p>Fetch in progress: {fetching}</p>
-        <h3>{ goldberg.name }</h3>
+        <h3>{ character.name }</h3>
+        <h3>Vehicles:</h3>
+        <ul>
+        </ul>
       </div>
     )
   }
@@ -22,7 +42,7 @@ let Query = React.createClass({
 
 const mapStateToProps = (state) => {
   return {
-    store: state
+    store: state.character
   }
 };
 
