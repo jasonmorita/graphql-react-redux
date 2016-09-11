@@ -4,7 +4,7 @@ import { getGraph } from '../../actions/character.js';
 
 const query = `
     query Person {
-      person(id: "15") {
+      person(id: "35") {
         name
         url
         vehicles {
