@@ -34,7 +34,7 @@ let Query = React.createClass({
 
         return (
             <div>
-                <p>Fetching: {this.props.store.character.fetching}</p>
+                <p>Fetching: {fetching}</p>
                 <h3>{ name }</h3>
                 <h3>Vehicles:</h3>
                 <ul>
