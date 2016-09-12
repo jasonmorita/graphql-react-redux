@@ -36,14 +36,14 @@ let Character = React.createClass({
 
         let entity = get(character, 'character.entity');
 
-        let films = get(character, 'character.films') || [];
-        let filmList = films.map((film, i) => <li key={i}>{film.title}</li>);
+        let filmList = get(character, 'character.films', [])
+            .map((film, i) => <li key={i}>{ film.title }</li>);
 
-        let species = get(character, 'character.species') || [];
-        let speciesList = species.map((species, i) => <li key={i}>{species.name}</li>);
+        let speciesList = get(character, 'character.species', [])
+            .map((species, i) => <li key={i}>{ species.name }</li>);
 
-        let vehicles = get(character, 'character.vehicles') || [];
-        let vehicleList = vehicles.map((vehicle, i) => <li key={i}>{vehicle.name}</li>);
+        let vehicleList = get(character, 'character.vehicles', [])
+            .map((vehicle, i) => <li key={i}>{ vehicle.name }</li>);
 
         let fetchingMarkup = (
             <div>
@@ -77,7 +77,7 @@ let Character = React.createClass({
                     })()}
 
                     {(() => {
-                        if (species.length > 0) {
+                        if (speciesList.length > 0) {
                             return (
                                 <div>
                                     <h3>Species:</h3>
@@ -88,7 +88,7 @@ let Character = React.createClass({
                     })()}
 
                     {(() => {
-                        if (films.length > 0) {
+                        if (filmList.length > 0) {
                             return (
                                 <div>
                                     <h3>Films:</h3>
@@ -99,7 +99,7 @@ let Character = React.createClass({
                     })()}
 
                     {(() => {
-                        if (vehicles.length > 0) {
+                        if (vehicleList.length > 0) {
                             return (
                                 <div>
                                     <h3>Vehicles:</h3>
