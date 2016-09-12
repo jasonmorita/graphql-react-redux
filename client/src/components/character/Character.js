@@ -1,6 +1,6 @@
 import React from 'react';
 import { connect } from 'react-redux';
-import { getGraph } from '../../actions/character.js';
+import { getGraph } from './character-actions.js';
 import get from 'lodash.get';
 
 const query = `
@@ -11,9 +11,6 @@ const query = `
             entity {
                 abstract
                 image
-            }
-            species {
-                name
             }
             vehicles {
                 name

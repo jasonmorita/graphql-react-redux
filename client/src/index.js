@@ -1,14 +1,11 @@
 import React from 'react';
 import ReactDOM from 'react-dom';
-
 import { createStore, applyMiddleware } from "redux";
 import { Provider } from "react-redux";
-import reducer from "./reducers/reducers.js";
+import reducer from "./baseReducer.js";
 import thunkMiddleware from "redux-thunk";
 import compose from 'lodash.compose';
-
 import './index.css';
-
 import { CharacterContainer } from "./components/character/Character.js";
 
 let store = createStore(reducer, compose(
