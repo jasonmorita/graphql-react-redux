@@ -131,6 +131,17 @@ const SpeciesType = new GraphQLObjectType({
     })
 });
 
+const RandomType = new GraphQLObjectType({
+    name: 'Random',
+    description: 'this is a test',
+    fields: () => ({
+        random: {
+            type: GraphQLString,
+            resolve: (random) => random
+        }
+    })
+});
+
 const QueryType = new GraphQLObjectType({
     name: 'Query',
     description: '...',
@@ -142,6 +153,10 @@ const QueryType = new GraphQLObjectType({
                 id: {type: GraphQLString}
             },
             resolve: (root, args) => getPersonById(`${args.id}`)
+        },
+        random: {
+            type: RandomType,
+            resolve: () => "This could be literally anything from a DB call to a timestamp to a GIF generator."
         }
     })
 });
