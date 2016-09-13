@@ -19,6 +19,8 @@ const URL_SPECIES = '/species';
 
 const DDG_URL = 'http://api.duckduckgo.com/?format=json&q=';
 
+const GIPHY_URL = 'http://api.giphy.com/v1/gifs/search?api_key=dc6zaTOxFJmzC&limit=1&q=';
+
 function getPersonById(id) {
     let url = `${BASE_URL}${URL_PEOPLE}/${id}${URL_PARAMS}`;
     return fetch(url)
@@ -42,6 +44,15 @@ function getEntityByName(name) {
     return fetch(`${DDG_URL}${name}`)
     .then(res => {
         console.log('getEntityByName');
+        return res.json();
+    })
+    .then(json => json);
+}
+
+function getGiphyBySearch(search) {
+    return fetch(`${GIPHY_URL}${encodeURIComponent(search)}`)
+    .then(res => {
+        console.log('getGiphyBySearch');
         return res.json();
     })
     .then(json => json);
@@ -87,6 +98,18 @@ const FilmType = new GraphQLObjectType({
         title: {
             type: GraphQLString,
             resolve: (film) => film.title
+        }
+    })
+});
+
+const GiphyType = new GraphQLObjectType({
+    name: 'Giphy',
+    description: '...',
+
+    fields: () => ({
+        data: {
+            type: GraphQLString,
+            resolve: (giphy) => giphy.data[0].images.downsized.url
         }
     })
 });
@@ -153,6 +176,13 @@ const QueryType = new GraphQLObjectType({
                 id: {type: GraphQLString}
             },
             resolve: (root, args) => getPersonById(`${args.id}`)
+        },
+        giphy: {
+            type: GiphyType,
+            args: {
+                search: {type: GraphQLString}
+            },
+            resolve: (root, args) => getGiphyBySearch(`${args.search}`)
         },
         random: {
             type: RandomType,
